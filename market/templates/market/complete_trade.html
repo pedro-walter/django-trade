@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% block title %} - {% trans "Accept Trade" %}{% endblock %}
+{% block content %}
+<h3>You are about to complete the following trade from 
+  <a href="/players/{{ object.player.id }}">{{ object.player.display_name }}</a>:
+</h3>
+<p>You offer: {{ object.offer.qty_offered }}x {{ object.offer.item_offered }}</p>
+<p>You receive: {{ object.offer.qty_wanted }}x {{ object.offer.item_wanted }}</p>
+<p><b>Are you sure you want to complete this trade?</b></p>
+<p>
+  <form method="POST">
+    {% csrf_token %}
+    {% buttons %}
+      <button type="submit" class="btn btn-success">Yes!</button>
+      <a href="/offers/{{ object.offer.id }}"
+         class="btn btn-danger">Wait, let me reconsider...</a>      
+    {% endbuttons %}    
+  </form>
+
+</p>
+{% endblock %}

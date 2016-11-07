@@ -1,0 +1,43 @@
+{% load bootstrap3 %}
+{% if bid_data.bid.canceled == False or bid_data.bid.canceled == None %}
+  {% if bid_action != "Send bid" %}
+    {% if bid_data.bid.player == user.player %}
+      <h3>Your bid messages</h3>
+    {% else %}
+      <h3>Bid from <a href="/players/{{ bid_data.bid.player.id }}">{{ bid_data.bid.player.display_name }}</a></h3>
+    {% endif %}
+  {% else %}
+    <h3>Leave a message below to send your bid!</h3>
+  {% endif %}
+  {% for bid_message in bid_data.bid.bidmessage_set.all %}
+    <div>
+      <p><b>{{ bid_message.player.display_name }} on {{ bid_message.date_posted }} wrote:</b></p>
+      <p>{{ bid_message.message }}</p>
+    </div>
+  {% endfor %}
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form bid_data.form %}  
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">
+        {{ bid_action }}
+      </button>
+      {% if user.player == bid_data.bid.offer.player and bid_data.bid.offer.status == "OF" %}
+        <a href="/accept_trade/{{ bid_data.bid.id }}" 
+           class="btn btn-success">
+           Accept trade</a>
+      {% elif bid_data.bid.offer.status == "BA" and bid_data.bid.accepted_for_trade %}
+        {% if user.player == bid_data.bid.offer.player and not bid_data.bid.offer.offerer_approved %}
+          <a href="/complete_trade/{{ bid_data.bid.id }}" 
+             class="btn btn-success">
+             Complete trade</a>
+        {% elif user.player == bid_data.bid.player and not bid_data.bid.offer.bidder_approved %}
+          <a href="/complete_trade/{{ bid_data.bid.id }}" 
+             class="btn btn-success">
+             Complete trade</a>                 
+        {% endif %}
+      
+      {% endif %}
+    {% endbuttons %}
+  </form>    
+{% endif %}  

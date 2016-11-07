@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% block title %} - {% trans "Set password" %}{% endblock %}
+{% block content %}
+  <h3>Do you want to cancel yout bid on the following offer?</h3>
+  <form method="post">
+    {% csrf_token %}
+    <p><b>Platform: </b>{{ object.offer.platform }}</p>
+    <p><b>Item offered: </b>{{ object.offer.item_offered }}</p>
+    <p><b>Quantity offered: </b>{{ object.offer.qty_offered }}</p>
+    <p><b>Item wanted: </b>{{ object.offer.item_wanted }}</p>
+    <p><b>Quantity wanted: </b>{{ object.offer.qty_wanted }}</p>
+    {% buttons %}
+      <button type="submit" class="btn btn-danger">Yes, please!</button>
+      <a href="/offers/{{ object.offer.id }}"
+         class="btn btn-warning">No! Turn back!</a>    
+    {% endbuttons %}
+  </form>
+{% endblock %}

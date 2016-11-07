@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% block title %} - {% trans "Set password" %}{% endblock %}
+{% block content %}
+<div class="col-md-offset-1 col-md-4">
+    <h3>{{ object.user.player.display_name }}</h3>
+    <p><b>Platform: </b>{{ object.platform }}</p>
+    <p><b>Platform username: </b>{{ object.platform_username }}</p>
+</div>
+{% endblock %}

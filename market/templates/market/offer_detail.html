@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% block title %} - {% trans "Offer" %}{% endblock %}
+{% block content %}
+<div class="col-md-offset-1 col-md-4">
+  <table class="table">
+    <tbody>
+        <tr>
+            <td>Status:</td>
+            <td>{{ object.get_status_display }}</td>
+        </tr><tr>
+            <td>Player:</td>
+            <td><a href="/players/{{ object.player.id }}">
+              {{ object.player }}
+            </a></td>
+        </tr><tr>        
+            <td>Platform:</td>
+            <td>{{ object.platform }}</td>
+        </tr><tr>
+            <td>Offers:</td>
+            <td>{{ object.qty_offered }}x {{ object.item_offered }}</td>
+        </tr><tr>
+            <td>Wants:</td>
+            <td>{{ object.qty_wanted }}x {{ object.item_wanted }}</td>
+        </tr>
+    </tbody>
+  </table>
+  {% if offer.status == 'BA' or offer.status == 'CO' %}
+    {% if offer.player == user.player %}
+      {% include "market/offer_alert.html" with approved=offer.offerer_approved %}
+    {% elif bid.player == user.player and bid.accepted_for_trade %}
+      {% include "market/offer_alert.html" with approved=offer.bidder_approved %}    
+    {% else %}
+      <div class="alert alert-info" role="alert">You were not the winning bidder on this offer</div>
+    {% endif %}
+  {% endif %}
+  {% for bid_data in bids_data %}
+    {% if object.status = 'OF' %}
+      {% include "market/bid_detail.html" with bid_data=bid_data %}
+    {% elif bid_data.bid.offer.player == user.player or bid_data.bid.player == user.player %}  
+      {% include "market/bid_detail.html" with bid_data=bid_data %}
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

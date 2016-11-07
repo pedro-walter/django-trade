@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %} - Players{% endblock %}
+{% block content %}
+<h1>Listing your offers</h1>
+<table class="table">
+    <thead>
+        <th>Status</th>
+        <th>Platform</th>
+        <th>Offering</th>
+        <th>Wanting</th>
+    </thead>
+    <tbody>
+        {% for offer in object_list %}
+            <tr>
+                <td>{{ offer.get_status_display }}</td>
+                <td>{{ offer.platform }}</td>
+                <td>{{ offer.qty_offered }}x {{ offer.item_offered }}</td>
+                <td>{{ offer.qty_wanted }}x {{ offer.item_wanted }}</td>
+                <td><a href="/offers/{{ offer.id }}" 
+                       class="btn btn-primary">
+                       {% bootstrap_icon "eye-open" %}</a>
+                    {% if offer.status == "OF" %}
+                      <a href="/offers/edit/{{ offer.id }}" 
+                         class="btn btn-warning">
+                         {% bootstrap_icon "pencil" %}</a>
+                    {% endif %}
+                    {% if offer.status != "CO" and offer.status != "CA" %}
+                      <a href="/offers/delete/{{ offer.id }}" 
+                         class="btn btn-danger">
+                         {% bootstrap_icon "trash" %}</a>
+                    {% endif %}
+                </td>                
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Listing offers you bidded</h1>
+<table class="table">
+    <thead>
+        <th>Status</th>
+        <th>Platform</th>
+        <th>Offering</th>
+        <th>Wanting</th>
+    </thead>
+    <tbody>
+        {% for bid in my_bids %}
+          {% if bid.canceled == False %}
+            <tr>                    
+                <td>{{ bid.offer.get_status_display }}</td>
+                <td>{{ bid.offer.platform }}</td>
+                <td>{{ bid.offer.qty_offered }}x {{ bid.offer.item_offered }}</td>
+                <td>{{ bid.offer.qty_wanted }}x {{ bid.offer.item_wanted }}</td>
+                <td><a href="/offers/{{ bid.offer.id }}" 
+                       class="btn btn-primary">            
+                       {% bootstrap_icon "eye-open" %}</a>
+                    {% if bid.offer.status != "CO" and bid.offer.status != "CA" and bid.canceled == False %}
+                      <a href="/bid/delete/{{ bid.id }}" 
+                         class="btn btn-danger">
+                         {% bootstrap_icon "trash" %}</a>
+                    {% endif %}
+                </td>                
+            </tr>
+          {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

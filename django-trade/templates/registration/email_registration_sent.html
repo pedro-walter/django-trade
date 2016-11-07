@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - Register{% endblock %}
+{% block content %}
+<div class="well">
+  <p>{% blocktrans %}We sent you an email to {{ email }}.
+  Please click the contained link to finish your registration.{% endblocktrans %}</p>
+</div>
+{% endblock %}

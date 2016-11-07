@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% block title %} - {% trans "Set password" %}{% endblock %}
+{% block content %}
+<div class="col-md-offset-1 col-md-4">
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+    {% endbuttons %}
+  </form>
+</div>
+{% endblock %}

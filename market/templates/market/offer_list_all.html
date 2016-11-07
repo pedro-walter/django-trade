@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block title %} - All offers{% endblock %}
+
+{% block content %}
+<h1>Listing all offers</h1>
+<h3>Filter by:</h3>
+<form method="get" class="form-inline">
+  {% csrf_token %}
+  {# Include the hidden fields #}
+  {% for hidden in filter.form.hidden_fields %}
+    {{ hidden }}
+  {% endfor %}
+  {# Include the visible fields #}
+  {% for field in filter.form.visible_fields %}
+    <div class="form-group">
+      {{ field.label_tag }}
+      <select class="form-control input-sm">
+        {% for value, display in field.field.choices %}
+          <option value="{{value}}">{{display}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endfor %}
+  {% buttons %}
+    <button type="submit" class="btn btn-primary">
+      Filter
+    </button>
+  {% endbuttons %}
+</form>  
+<table class="table table-hover table-bordered">
+    <thead>
+        <th>Player</th>
+        <th>Platform</th>
+        <th>Offers</th>
+        <th>Wants</th>
+    </thead>
+    <tbody>
+        {% for offer in object_list %}
+            <tr class='clickable-row' data-href="/offers/{{ offer.id }}">
+                <td><a href="/players/{{ offer.player.id }}">
+                  {{ offer.player }}
+                </a></td>
+                <td>{{ offer.platform }}</td>
+                <td>{{ offer.qty_offered }}x {{ offer.item_offered }}</td>
+                <td>{{ offer.qty_wanted }}x {{ offer.item_wanted }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+.clickable-row {
+    cursor: pointer;
+    cursor: hand;
+}
+</style>
+{% endblock %}
+
+{% block script %}
+<script>
+$(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}

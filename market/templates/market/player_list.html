@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} - Players{% endblock %}
+{% block content %}
+<table class="table">
+    <thead>
+        <th>Username</th>
+        <th>Platform</th>
+        <th>Screen Name</th>
+    </thead>
+    <tbody>
+        {% for player in object_list %}
+            <tr>
+                <td>{{ player.user.username }}</td>
+                <td>{{ player.platform.name }}</td>
+                <td>{{ player.platform_username }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

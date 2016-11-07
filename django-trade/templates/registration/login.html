@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load i18n towel_form_tags bootstrap3 %}
+{% load socialaccount %}
+{% block title %} - {% trans "Set password" %}{% endblock %}
+{% block content %}
+<div class="col-md-offset-1 col-md-4">
+  <a href="{% provider_login_url "openid" openid="http://steamcommunity.com/openid" next="/steamlogin" %}">
+    <img src="http://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
+         alt="Steam Login">
+  </a>
+  {% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+  
+  <h3>Your username is your e-mail adress!</h3>
+  
+  {% if next %}
+      {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+      {% else %}
+      <p>Please login to see this page.</p>
+      {% endif %}
+  {% endif %}
+  
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">
+        Login
+      </button>
+    {% endbuttons %}
+  </form>
+  
+  {# Assumes you setup the password_reset view in your URLconf #}
+  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+</div>
+{% endblock %}
